@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KARSAGON P68 — Data Carestimase</title>
+    <style>
+        :root {
+            --primary: #d97706;
+            --secondary: #1f2937;
+            --bg: #f3f4f6;
+            --text: #111827;
+        }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        .result { margin-top: 20px; padding: 15px; background: #fffbeb; border-left: 4px solid var(--primary); display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>KARSAGON P68</h1>
+    <div class="form-group">
+        <label for="tier">Pilih Kategori Layanan:</label>
+        <select id="tier" onchange="updatePlaceholder()">
+            <option value="awam">Tier Awam (Rp20.000/m²)</option>
+            <option value="kontraktor">Tier Menengah - Kontraktor/Mandor (Rp15.000/m²)</option>
+            <option value="arsitek">Tier Tertinggi - Arsitek (Max Rp3.000.000)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="luas" id="luas-label">Luas Bangunan (m²):</label>
+        <input type="number" id="luas" placeholder="Masukkan luas Netto">
+    </div>
+    <div class="form-group" id="file-group" style="display:none;">
+        <label for="file">Unggah Kredensial Arsitek / Gambar Kerja:</label>
+        <input type="file" id="file">
+    </div>
+    <button onclick="calculate()">Proses Estimasi & SPK</button>
+
+    <div class="result" id="result">
+        <h3>Hasil Analisis Karsagon</h3>
+        <p id="biaya-text"></p>
+        <p><strong>Status Akses:</strong> Terkunci (Menunggu Verifikasi Pembayaran)</p>
+        <hr>
+        <h4>Registrasi Ekosistem Karsagon</h4>
+        <input type="text" id="nama" placeholder="Nama Lengkap" style="margin-bottom:10px;"><br>
+        <input type="text" id="kawasan" placeholder="Kawasan/Wilayah (Contoh: Kuta, Badung)" style="margin-bottom:10px;"><br>
+        <p><small>*Nomor HP dan Alamat Lengkap otomatis disembunyikan demi privasi.</small></p>
+        <button onclick="register()">Daftar & Bayar Akses</button>
+    </div>
+</div>
+
+<script>
+    function updatePlaceholder() {
+        const tier = document.getElementById('tier').value;
+        const fileGroup = document.getElementById('file-group');
+        const luasInput = document.getElementById('luas');
+        if (tier === 'arsitek') {
+            fileGroup.style.display = 'block';
+            luasInput.value = '';
+            luasInput.placeholder = 'Estimasi Volume';
+        } else {
+            fileGroup.style.display = 'none';
+        }
+    }
+
+    function calculate() {
+        const tier = document.getElementById('tier').value;
+        const luas = document.getElementById('luas').value;
+        if(!luas) { alert('Harap isi data ukuran'); return; }
+        
+        let total = 0;
+        if(tier === 'awam') total = luas * 20000;
+        else if(tier === 'kontraktor') total = luas * 15000;
+        else if(tier === 'arsitek') total = Math.min(luas * 25000, 3000000);
+
+        document.getElementById('biaya-text').innerHTML = `Estimasi Biaya Sistem: <strong>Rp ${total.toLocaleString()}</strong>`;
+        document.getElementById('result').style.display = 'block';
+    }
+
+    function register() {
+        const nama = document.getElementById('nama').value;
+        const kawasan = document.getElementById('kawasan').value;
+        if(!nama || !kawasan) { alert('Lengkapi data registrasi zona'); return; }
+        alert('Data diterima. Mengalihkan ke Gerbang Pembayaran...');
+    }
+</script>
+
+</body>
+</html>
