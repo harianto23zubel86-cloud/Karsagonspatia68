@@ -1,158 +1,83 @@
-[build]
-  publish = "."
-  functions = "netlify/functions"
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katalog Harga Material - RAH.KARSA SPASIAL</title>
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; padding: 16px; background: #f4f6f8; color: #1e293b; }
+    .container { max-width: 720px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; margin-bottom: 8px; }
+    h1 { font-size: 20px; margin: 0 0 4px 0; color: #0f172a; }
+    p.sub { font-size: 13px; color: #64748b; margin: 0 0 16px 0; }
+    input.search { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; margin-bottom: 16px; outline: none; }
+    input.search:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { background: #0f172a; color: #ffffff; text-align: left; padding: 11px 12px; font-weight: 600; }
+    td { padding: 11px 12px; border-bottom: 1px solid #e2e8f0; }
+    tr:hover td { background: #f8fafc; }
+    .price { font-weight: 700; color: #0369a1; white-space: nowrap; }
+    .cat { font-size: 12px; color: #64748b; display: block; }
+    .footer { margin-top: 20px; font-size: 12px; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="badge">PORTAL HARGA MATERIAL</span>
+    <h1>RAH.KARSA SPASIAL — KARSAGON</h1>
+    <p class="sub">Referensi Estimasi Harga Material Konstruksi Terkini</p>
 
-# Jembatan API dari Web Publik ke Serverless Bridge
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/gateway-bridge"
-  status = 200
-  force = true
+    <input type="text" id="cari" class="search" placeholder="Ketik nama material (contoh: besi, triplek, semen, kaso)..." onkeyup="filterMaterial()">
 
-# Fallback SPA
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+    <div class="table-wrap">
+      <table id="tabelMaterial">
+        <thead>
+          <tr>
+            <th>Nama Material</th>
+            <th>Satuan</th>
+            <th>Harga Estimasi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Besi Beton Polos 10 mm SNI<span class="cat">Struktur & Pembesian</span></td><td>Batang</td><td class="price">Rp 85.000</td></tr>
+          <tr><td>Besi Beton Polos 8 mm SNI<span class="cat">Struktur & Pembesian</span></td><td>Batang</td><td class="price">Rp 62.000</td></tr>
+          <tr><td>Besi Beton Ulir D13 SNI<span class="cat">Struktur & Pembesian</span></td><td>Batang</td><td class="price">Rp 138.000</td></tr>
+          <tr><td>Kawat Bendrat<span class="cat">Struktur & Pembesian</span></td><td>Kg</td><td class="price">Rp 25.000</td></tr>
+          <tr><td>Kayu Kaso 4x6<span class="cat">Bekisting & Kayu</span></td><td>Batang</td><td class="price">Rp 35.000</td></tr>
+          <tr><td>Triplek / Multiplex 12 mm<span class="cat">Bekisting & Kayu</span></td><td>Lembar</td><td class="price">Rp 150.000</td></tr>
+          <tr><td>Triplek / Multiplex 9 mm<span class="cat">Bekisting & Kayu</span></td><td>Lembar</td><td class="price">Rp 115.000</td></tr>
+          <tr><td>Phenolic Film Plywood 12 mm<span class="cat">Bekisting Cor</span></td><td>Lembar</td><td class="price">Rp 235.000</td></tr>
+          <tr><td>Semen Portland 50 Kg<span class="cat">Pasangan & Plesteran</span></td><td>Sak</td><td class="price">Rp 68.000</td></tr>
+          <tr><td>Semen Instan Perekat Bata Ringan 40 Kg<span class="cat">Pasangan & Plesteran</span></td><td>Sak</td><td class="price">Rp 95.000</td></tr>
+          <tr><td>Bata Ringan (Hebel) Standar<span class="cat">Pasangan Dinding</span></td><td>m³</td><td class="price">Rp 610.000</td></tr>
+          <tr><td>Pasir Pasang / Cor<span class="cat">Agregat</span></td><td>m³</td><td class="price">Rp 290.000</td></tr>
+          <tr><td>Batu Split 1/2 Cor Beton<span class="cat">Agregat</span></td><td>m³</td><td class="price">Rp 310.000</td></tr>
+          <tr><td>Baja Ringan Kanal C75.75<span class="cat">Rangka Atap & Kanopi</span></td><td>Batang</td><td class="price">Rp 92.000</td></tr>
+          <tr><td>Reng Baja Ringan 30.45<span class="cat">Rangka Atap & Kanopi</span></td><td>Batang</td><td class="price">Rp 42.000</td></tr>
+          <tr><td>Atap Spandek Pasir 0.35 mm<span class="cat">Penutup Atap</span></td><td>Meter</td><td class="price">Rp 72.000</td></tr>
+          <tr><td>Paving Block Bata 6 cm K-300<span class="cat">Luar Ruang</span></td><td>m²</td><td class="price">Rp 95.000</td></tr>
+          <tr><td>Cat Tembok Interior 5 Kg<span class="cat">Finishing</span></td><td>Galon</td><td class="price">Rp 165.000</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-# Header Keamanan Tingkat Tinggi & Pembatasan Izin Latar Belakang
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "no-referrer"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
-    Cache-Control = "public, max-age=0, must-revalidate"
-{
-  "name": "karsagon-data-carestimase-web-gateway",
-  "version": "1.0.0",
-  "private": true,
-  "description": "RAH.KARSA SPASIAL - Portal Aplikasi Web Publik Terpisah (Client Gateway)",
-  "scripts": {
-    "start": "npx serve ."
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
-}
-const crypto = require('crypto');
+    <div class="footer">
+      *Harga merupakan acuan estimasi pasar dan dapat menyesuaikan lokasi pengiriman serta volume pesanan.<br>
+      <strong>RAH.KARSA SPASIAL</strong> • Layanan Konstruksi & Estimasi
+    </div>
+  </div>
 
-const OFFICIAL_RATES = Object.freeze({
-  A4: 12500,
-  A3: 25000,
-  A2: 50000
-});
-
-exports.handler = async (event) => {
-  const securityHeaders = {
-    'Content-Type': 'application/json',
-    'X-Frame-Options': 'DENY',
-    'X-Content-Type-Options': 'nosniff',
-    'Referrer-Policy': 'no-referrer'
-  };
-
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers: securityHeaders,
-      body: JSON.stringify({ ok: false, error: 'METHOD_NOT_ALLOWED' })
-    };
-  }
-
-  try {
-    const payload = JSON.parse(event.body || '{}');
-    const role = String(payload.userRole || 'UMUM').toUpperCase();
-    const a4 = Math.max(0, parseInt(payload.sheets?.A4 || 0, 10));
-    const a3 = Math.max(0, parseInt(payload.sheets?.A3 || 0, 10));
-    const a2 = Math.max(0, parseInt(payload.sheets?.A2 || 0, 10));
-    const certCode = String(payload.certCode || '').trim();
-    const idempotencyKey = String(payload.idempotencyKey || '').trim();
-
-    if (!idempotencyKey) {
-      return {
-        statusCode: 400,
-        headers: securityHeaders,
-        body: JSON.stringify({ ok: false, error: 'MISSING_IDEMPOTENCY_KEY' })
-      };
-    }
-
-    // 1. Pemeriksaan Awal Lapis Singa di Gerbang Edge
-    const requiresExpert = a2 > 0 || Boolean(payload.slfActive) || Boolean(payload.hseHighRisk);
-    const allowedExpertRoles = ['KONTRAKTOR', 'AKADEMISI', 'PROFESIONAL'];
-    const certPattern = /^(SKA|STRA|STRI)-[0-9]{3}-[0-9]{4,8}$/i;
-
-    if (requiresExpert && (!allowedExpertRoles.includes(role) || !certPattern.test(certCode))) {
-      return {
-        statusCode: 403,
-        headers: securityHeaders,
-        body: JSON.stringify({
-          ok: false,
-          shield: 'LION_SHIELD',
-          error: 'Akses Lembar A2 / Analisa Struktur SLF & HSE High Risk wajib akun Kontraktor, Akademisi, atau Profesional dengan Nomor Registrasi Arsitek/Ahli Struktur valid.'
-        })
-      };
-    }
-
-    // 2. Rekalkulasi Tarif Per Lembar di Sisi Server
-    const totalSheets = a4 + a3 + a2;
-    const grandTotalIdr = (a4 * OFFICIAL_RATES.A4) + (a3 * OFFICIAL_RATES.A3) + (a2 * OFFICIAL_RATES.A2);
-
-    if (totalSheets <= 0 || grandTotalIdr <= 0) {
-      return {
-        statusCode: 400,
-        headers: securityHeaders,
-        body: JSON.stringify({ ok: false, error: 'Minimal 1 lembar dokumen harus dipilih.' })
-      };
-    }
-
-    // 3. Teruskan ke Dapur Produksi bila PRIVATE_KITCHEN_ENDPOINT sudah diisi di Netlify Env
-    if (process.env.PRIVATE_KITCHEN_ENDPOINT) {
-      const ts = Date.now().toString();
-      const nonce = crypto.randomUUID();
-      const hmacSecret = process.env.GATEWAY_BRIDGE_SECRET || 'CONFIGURE_IN_NETLIFY_ENV';
-      const sig = crypto.createHmac('sha256', hmacSecret).update(`${ts}:${nonce}:${idempotencyKey}`).digest('hex');
-
-      const upstreamRes = await fetch(`${process.env.PRIVATE_KITCHEN_ENDPOINT}/internal/checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Gateway-Ts': ts,
-          'X-Gateway-Nonce': nonce,
-          'X-Gateway-Signature': sig,
-          'X-Idempotency-Key': idempotencyKey
-        },
-        body: JSON.stringify({ ...payload, verifiedTotalIdr: grandTotalIdr, totalSheets })
+  <script>
+    function filterMaterial() {
+      var input = document.getElementById("cari").value.toLowerCase();
+      var rows = document.querySelectorAll("#tabelMaterial tbody tr");
+      rows.forEach(function(row) {
+        var text = row.innerText.toLowerCase();
+        row.style.display = text.indexOf(input) > -1 ? "" : "none";
       });
-
-      const upstreamData = await upstreamRes.json();
-      return { statusCode: upstreamRes.status, headers: securityHeaders, body: JSON.stringify(upstreamData) };
     }
-
-    // 4. Mode Mandiri Siap Tayang & Screenshot (Sebelum VPC Dapur Produksi Disambungkan)
-    const snapshotId = `KSG-SNAP-${Date.now().toString().slice(-6)}-${crypto.randomInt(100, 999)}`;
-    const waterHash = crypto.createHash('sha256').update(`${snapshotId}:${idempotencyKey}:${grandTotalIdr}`).digest('hex').toUpperCase().slice(0, 24);
-
-    return {
-      statusCode: 200,
-      headers: securityHeaders,
-      body: JSON.stringify({
-        ok: true,
-        mode: 'EDGE_VERIFIED_QUEUE',
-        snapshotId,
-        idempotencyKey,
-        totalSheets,
-        grandTotalIdr,
-        waterSignature: `SHA256-${waterHash}`,
-        workerCluster: '12-WORKER-ASYNC-READY'
-      })
-    };
-  } catch (err) {
-    return {
-      statusCode: 500,
-      headers: securityHeaders,
-      body: JSON.stringify({ ok: false, error: 'GATEWAY_BRIDGE_INTERNAL_ERROR' })
-    };
-  }
-};
+  </script>
+</body>
+</html>
