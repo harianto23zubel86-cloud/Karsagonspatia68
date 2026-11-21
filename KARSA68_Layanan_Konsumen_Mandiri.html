@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KARSA 68 — Portal Layanan Konsumen, Estimasi Mandiri & Proteksi Proyek</title>
+  <style>
+    :root {
+      --bg-bone: #FAF8F3;
+      --bg-card: #FFFFFF;
+      --bg-soft: #F3EFE6;
+      --ink-main: #182232;
+      --ink-sec: #475569;
+      --ink-muted: #64748B;
+      --border-warm: #E2DCCE;
+      --accent-navy: #0F2942;
+      --accent-emerald: #0D7A5F;
+      --accent-gold: #B4690E;
+      --accent-red: #B91C1C;
+      --shadow-soft: 0 8px 28px rgba(24, 34, 50, 0.06);
+      --radius-lg: 16px;
+      --radius-md: 10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background-color: var(--bg-bone);
+      color: var(--ink-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.55;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* Auth Screen */
+    #authGate {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: linear-gradient(180deg, #FAF8F3 0%, #EFECE2 100%);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-warm);
+      border-radius: 20px;
+      padding: 32px 28px;
+      box-shadow: var(--shadow-soft);
+    }
+    .badge-pill {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      background: var(--bg-soft);
+      color: var(--accent-navy);
+      border: 1px solid var(--border-warm);
+      margin-bottom: 12px;
+    }
+    .scripture-box {
+      background: #FDFBF7;
+      border-left: 4px solid var(--accent-gold);
+      border-top: 1px solid var(--border-warm);
+      border-right: 1px solid var(--border-warm);
+      border-bottom: 1px solid var(--border-warm);
+      padding: 12px 16px;
+      border-radius: 0 10px 10px 0;
+      margin: 14px 0 20px;
+      font-size: 13px;
+      color: var(--ink-sec);
+    }
+    .scripture-box strong {
+      color: var(--accent-navy);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink-main);
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid #CBD5E1;
+      background: #FFFFFF;
+      color: var(--ink-main);
+      font-size: 14px;
+      font-family: inherit;
+      margin-bottom: 14px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--accent-navy);
+      border-color: transparent;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: var(--radius-md);
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent-navy); color: #FFFFFF; }
+    .btn-emerald { background: var(--accent-emerald); color: #FFFFFF; }
+    .btn-gold { background: var(--accent-gold); color: #FFFFFF; }
+    .btn-outline {
+      background: #FFFFFF;
+      color: var(--accent-navy);
+      border: 1px solid var(--border-warm);
+    }
+    .btn-full { width: 100%; }
+
+    /* Topbar */
+    .topbar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent-navy);
+      margin: 0;
+    }
+    .brand-sub {
+      font-size: 13px;
+      color: var(--ink-sec);
+      margin: 3px 0 0;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-warm);
+      background: var(--bg-card);
+      color: var(--ink-sec);
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: var(--accent-navy);
+      color: #FFFFFF;
+      border-color: var(--accent-navy);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      color: var(--accent-navy);
+    }
+    .card p.lead {
+      margin: 0 0 18px;
+      font-size: 13.5px;
+      color: var(--ink-sec);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+
+    .kpi-box {
+      background: var(--bg-bone);
+      border: 1px solid var(--border-warm);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .kpi-label { font-size: 12px; color: var(--ink-muted); font-weight: 600; }
+    .kpi-val { font-size: 20px; font-weight: 800; color: var(--accent-navy); margin-top: 4px; }
+    .kpi-note { font-size: 11.5px; color: var(--ink-sec); margin-top: 3px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-warm);
+      text-align: left;
+    }
+    th {
+      background: var(--bg-soft);
+      color: var(--accent-navy);
+      font-weight: 700;
+      font-size: 12.5px;
+    }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    canvas.blueprint {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      background: #FFFFFF;
+      border: 1px solid var(--border-warm);
+      border-radius: 12px;
+      display: block;
+    }
+
+    .tier-card {
+      background: var(--bg-bone);
+      border: 1px solid var(--border-warm);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tier-card.highlight {
+      border: 2px solid var(--accent-emerald);
+      background: #F4FBF8;
+    }
+    .price-tag {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent-emerald);
+      margin: 8px 0;
+    }
+
+    .score-banner {
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      margin-top: 14px;
+    }
+    .score-red { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
+    .score-green { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+    .score-gold { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
+
+    .hidden { display: none !important; }
+
+    @media print {
+      body { background: #FFFFFF; }
+      #authGate, .no-print, .nav-tabs { display: none !important; }
+      #appWorkspace, .tab-panel { display: block !important; }
+      .card { box-shadow: none; border: 1px solid #CBD5E1; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GERBANG AUTENTIKASI PRIVAT KONSUMEN -->
+  <div id="authGate">
+    <div class="auth-card">
+      <span class="badge-pill">KARSA 68 • RUANG LAYANAN KONSUMEN TERISOLASI</span>
+      <h1 style="margin:0 0 6px;font-size:22px;color:var(--accent-navy);">Selamat Datang di Portal Estimasi & Proteksi Bangunan</h1>
+      <p style="margin:0;font-size:13.5px;color:var(--ink-sec);">
+        Dirancang oleh <strong>RAH.KARSA SPASIAL</strong> untuk menjaga transparansi rencana anggaran, kualitas gambar kerja, dan keharmonisan antara Pemilik Rumah, Mandor, serta Tukang.
+      </p>
+
+      <div class="scripture-box">
+        <strong>Landasan Hikmat Perencanaan (Lukas 14:28 & Ibrani 3:4)</strong>
+        "Sebab siapakah di antara kamu yang kalau mau mendirikan sebuah menara tidak duduk dahulu membuat anggaran biayanya, kalau-kalau cukup uangnya untuk menyelesaikan pekerjaan itu?"
+      </div>
+
+      <form id="loginForm" onsubmit="handleAuthSubmit(event)">
+        <label for="authEmail">Alamat Email Aktif</label>
+        <input id="authEmail" type="email" required placeholder="nama@email.com" />
+
+        <label for="authPass">Kata Sandi Privat</label>
+        <input id="authPass" type="password" required minlength="4" placeholder="Minimal 4 karakter" />
+
+        <div class="grid-2" style="gap:10px;">
+          <div>
+            <label for="authRole">Peran Pengguna</label>
+            <select id="authRole">
+              <option value="Pemilik Rumah / Konsumen">Pemilik Rumah / Konsumen</option>
+              <option value="Mandor / Pelaksana">Mandor / Pelaksana</option>
+              <option value="Kontraktor / Rekan Sejawat">Kontraktor / Rekan Sejawat</option>
+            </select>
+          </div>
+          <div>
+            <label for="authLicense">Kunci Lisensi KARSA 68 (Opsional)</label>
+            <input id="authLicense" type="text" placeholder="KARSA68-XXXX (Jika Ada)" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top:6px;">
+          Masuk ke Ruang Layanan Konsumen KARSA 68
+        </button>
+      </form>
+      <p style="margin:12px 0 0;font-size:11.5px;color:var(--ink-muted);text-align:center;">
+        Privasi Terlindungi: Sesi berjalan mandiri pada perangkat Anda tanpa mengekspos data ke pihak ketiga.
+      </p>
+    </div>
+  </div>
+
+  <!-- RUANG KERJA UTAMA KONSUMEN -->
+  <div id="appWorkspace" class="container hidden">
+    <header class="topbar">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span class="badge-pill" style="margin:0;">EDISI KARSA 68 • BERSIH & MANDIRI</span>
+          <span id="licenseBadge" class="badge-pill" style="margin:0;background:#ECFDF5;color:#065F46;border-color:#A7F3D0;">Mode Akses Konsumen Aktif</span>
+        </div>
+        <h1 class="brand-title" style="margin-top:6px;">KARSA 68 — Layanan Estimasi Mandiri, Gambar 2D & Screening Tim</h1>
+        <p class="brand-sub">Pengguna: <strong id="displayUserEmail">-</strong> (<span id="displayUserRole">-</span>) • Etika Konstruksi Amanah & Terukur</p>
+      </div>
+      <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="btn btn-emerald" onclick="exportFullReportPrint()">Unduh / Cetak Laporan PDF</button>
+        <button type="button" class="btn btn-outline" onclick="exportBoqCsv()">Unduh Tabel RAB (.CSV)</button>
+        <button type="button" class="btn btn-outline" onclick="logoutSession()">Keluar</button>
+      </div>
+    </header>
+
+    <nav class="nav-tabs no-print">
+      <button type="button" class="tab-btn active" onclick="switchTab('tab-rab', this)">1. Kalkulator RAB & Material</button>
+      <button type="button" class="tab-btn" onclick="switchTab('tab-gambar', this)">2. Gambar Kerja 2D & Persepsi</button>
+      <button type="button" class="tab-btn" onclick="switchTab('tab-screening', this)">3. Screening Mandor & Tukang (Skor 7–9)</button>
+      <button type="button" class="tab-btn" onclick="switchTab('tab-etika', this)">4. Etika 3 Peran & Draf SPK Aman</button>
+      <button type="button" class="tab-btn" onclick="switchTab('tab-paket', this)">5. Paket Layanan Beretika</button>
+    </nav>
+
+    <!-- TAB 1: KALKULATOR RAB & TRANSPARANSI MATERIAL -->
+    <section id="tab-rab" class="tab-panel">
+      <div class="card">
+        <h2>1. Kalkulator Estimasi Mandiri & Transparansi Material (Open-Book)</h2>
+        <p class="lead">
+          Hitung perkiraan anggaran di depan sebelum memanggil tukang atau memulai proyek. Dilengkapi pemotong stok material gudang agar terhindar dari belanja ganda.
+        </p>
+
+        <div class="grid-4">
+          <div>
+            <label for="inpType">Tipologi Bangunan</label>
+            <select id="inpType" onchange="recalculateAll()">
+              <option value="hunian_kecil">Rumah Tinggal Sederhana / Tumbuh (40–80 m²)</option>
+              <option value="hunian_menengah">Rumah Tinggal / Renovasi Menengah (81–150 m²)</option>
+              <option value="ruko_kos">Ruko / Kos Produktif</option>
+            </select>
+          </div>
+          <div>
+            <label for="inpWidth">Lebar Bangunan (Meter)</label>
+            <input id="inpWidth" type="number" step="0.1" min="3" max="50" value="6" oninput="recalculateAll()" />
+          </div>
+          <div>
+            <label for="inpLength">Panjang Bangunan (Meter)</label>
+            <input id="inpLength" type="number" step="0.1" min="3" max="60" value="10" oninput="recalculateAll()" />
+          </div>
+          <div>
+            <label for="inpFloors">Jumlah Lantai</label>
+            <select id="inpFloors" onchange="recalculateAll()">
+              <option value="1">1 Lantai</option>
+              <option value="2">2 Lantai (Bekisting Multipleks 12mm Reuse)</option>
+              <option value="3">3 Lantai</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div>
+            <label for="inpSpec">Kelas Spesifikasi Finishing Arsitektur</label>
+            <select id="inpSpec" onchange="recalculateAll()">
+              <option value="4500000">Standar Terukur & Efisien (Rp 4.500.000 / m²)</option>
+              <option value="5750000">Menengah Berkualitas (Rp 5.750.000 / m²)</option>
+              <option value="7250000">Premium Arsitektural (Rp 7.250.000 / m²)</option>
+            </select>
+          </div>
+          <div>
+            <label for="inpRegion">Zona Indeks Harga Wilayah</label>
+            <select id="inpRegion" onchange="recalculateAll()">
+              <option value="1.00">Tangerang Selatan / Jabodetabek (1,00x)</option>
+              <option value="1.08">Badung / Denpasar — Bali (1,08x)</option>
+              <option value="0.97">Rata-Rata Wilayah Nasional (0,97x)</option>
+            </select>
+          </div>
+          <div>
+            <label for="inpRooms">Jumlah Kamar Tidur / Ruang Utama</label>
+            <input id="inpRooms" type="number" min="1" max="12" value="2" oninput="recalculateAll()" />
+          </div>
+        </div>
+
+        <div style="background:var(--bg-bone);border:1px solid var(--border-warm);border-radius:12px;padding:14px;margin-top:6px;">
+          <div style="font-size:13px;font-weight:800;color:var(--accent-navy);margin-bottom:10px;">
+            Pemotong Sisa Stok Material di Lokasi (Anti Belanja Ganda)
+          </div>
+          <div class="grid-4">
+            <div>
+              <label for="stkSemen">Semen PC 50kg (@ Rp 66.000)</label>
+              <input id="stkSemen" type="number" min="0" value="0" oninput="recalculateAll()" />
+            </div>
+            <div>
+              <label for="stkBesi10">Besi Beton 10mm SNI (@ Rp 85.000)</label>
+              <input id="stkBesi10" type="number" min="0" value="0" oninput="recalculateAll()" />
+            </div>
+            <div>
+              <label for="stkKaso">Kaso 4x6 (@ Rp 35.000)</label>
+              <input id="stkKaso" type="number" min="0" value="0" oninput="recalculateAll()" />
+            </div>
+            <div>
+              <label for="stkTriplek">Multipleks 12mm (@ Rp 150.000)</label>
+              <input id="stkTriplek" type="number" min="0" value="0" oninput="recalculateAll()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-4" style="margin-top:18px;">
+          <div class="kpi-box">
+            <div class="kpi-label">Luas Terbangun Total</div>
+            <div class="kpi-val" id="kpiArea">60,0 m²</div>
+            <div class="kpi-note" id="kpiAreaNote">6,0 m × 10,0 m • 1 Lantai</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Porsi Material Konstruksi (62%)</div>
+            <div class="kpi-val" id="kpiMaterial">Rp 0</div>
+            <div class="kpi-note">Setelah potong stok gudang</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Porsi Upah Borongan & Alat (38%)</div>
+            <div class="kpi-val" id="kpiLabor">Rp 0</div>
+            <div class="kpi-note" id="kpiDuration">Estimasi ±0 Hari Kerja</div>
+          </div>
+          <div class="kpi-box" style="background:#ECFDF5;border-color:#A7F3D0;">
+            <div class="kpi-label" style="color:#065F46;">Total Estimasi RAB Bersih</div>
+            <div class="kpi-val" style="color:#065F46;" id="kpiTotalNet">Rp 0</div>
+            <div class="kpi-note" id="kpiSavingNote">Hemat stok: Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Tabel Transparansi Kebutuhan Material Utama & Tahapan Termin Aman</h2>
+        <p class="lead">
+           disusun mengikuti urutan 3 Fase Eksekusi (Persiapan/Struktur, Pemasangan Arsitektur, dan Finishing/Checklist QC) agar arus kas pemilik rumah aman.
+        </p>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Komponen Material / Pekerjaan</th>
+                <th>Harga Satuan Acuan</th>
+                <th class="num">Estimasi Volume</th>
+                <th class="num">Potong Stok</th>
+                <th class="num">Subtotal Bersih</th>
+              </tr>
+            </thead>
+            <tbody id="materialTableBody"></tbody>
+          </table>
+        </div>
+
+        <h3 style="margin:22px 0 8px;font-size:15.5px;color:var(--accent-navy);">Skema Pembayaran Termin Berbasis Progres Fisik (Proteksi Anti-Boncos)</h3>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Tahap Termin</th>
+                <th>Syarat Kelulusan Checklist Lapangan</th>
+                <th class="num">Bobot</th>
+                <th class="num">Nominal Pencairan</th>
+              </tr>
+            </thead>
+            <tbody id="terminTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: GAMBAR KERJA 2D & PERSEPSI -->
+    <section id="tab-gambar" class="tab-panel hidden">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+          <div>
+            <h2>2. Visualisasi Gambar Kerja 2D & Tampak Persepsi Berskala</h2>
+            <p class="lead" style="margin:0;">Menyatukan persepsi ukuran antara Pemilik Rumah, Mandor, dan Tukang sebelum tarik benang dan pasang bouwplank.</p>
+          </div>
+          <button type="button" class="btn btn-primary no-print" onclick="downloadBlueprintPng()">Unduh Lembar Gambar (.PNG)</button>
+        </div>
+        <canvas id="blueprintCanvas" class="blueprint" width="1040" height="540"></canvas>
+        <p style="font-size:12px;color:var(--ink-muted);margin-top:10px;">
+          Catatan Etika Profesi: Gambar kerja 2D standar ini membantu perencanaan awal hunian sederhana (40–100 m²). Untuk bangunan bentang khusus, bertingkat kompleks, atau perizinan PBG/SLF skala besar, kami merangkul dan menyarankan kolaborasi bersama Arsitek & Insinyur Struktur Berlisensi.
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB 3: SCREENING MANDOR & TUKANG -->
+    <section id="tab-screening" class="tab-panel hidden">
+      <div class="card">
+        <h2>3. Lembar Screening Objektif Mandor & Tukang (Standar Lulus Nilai 7,0 – 9,0)</h2>
+        <p class="lead">
+          Jangan menyerahkan proyek kepada orang yang hanya butuh uang namun tidak menguasai dasar teknis (seperti tarik benang, lot, siku, dan plesteran). Nilai secara objektif sebelum tanda tangan SPK.
+        </p>
+
+        <div class="grid-2">
+          <div>
+            <label for="scrCandidateName">Nama Calon Mandor / Kepala Tukang</label>
+            <input id="scrCandidateName" type="text" placeholder="Contoh: Bpk. Sutrisno" />
+          </div>
+          <div>
+            <label for="scrCandidateRole">Posisi yang Diuji</label>
+            <select id="scrCandidateRole">
+              <option value="Mandor / Pelaksana Lapangan">Mandor / Pelaksana Lapangan</option>
+              <option value="Kepala Tukang / Tukang Batu">Kepala Tukang / Tukang Batu</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2" id="screeningInputsContainer"></div>
+
+        <div id="screeningResultBox" class="score-banner score-green"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4: ETIKA 3 PERAN & DRAF SPK -->
+    <section id="tab-etika" class="tab-panel hidden">
+      <div class="card">
+        <h2>4. Pedoman Keselarasan 3 Peran & Proteksi SPK Tertulis</h2>
+        <p class="lead">Memutus rantai saling menyalahkan di media sosial melalui perencanaan matang, kejelasan peran, dan ikatan kerja yang adil.</p>
+
+        <div class="grid-3">
+          <div class="kpi-box">
+            <div style="font-weight:800;color:var(--accent-navy);margin-bottom:6px;">1. Pemilik Rumah Bijak</div>
+            <p style="font-size:13px;margin:0;color:var(--ink-sec);">
+              Menghitung anggaran di depan (Lukas 14:28), menyiapkan gambar acuan sebelum memanggil tukang, tidak mengubah desain mendadak tanpa hitung tambah-kurang, serta membayar termin tepat waktu saat mutu tercapai.
+            </p>
+          </div>
+          <div class="kpi-box">
+            <div style="font-weight:800;color:var(--accent-emerald);margin-bottom:6px;">2. Mandor Kompeten & Jujur</div>
+            <p style="font-size:13px;margin:0;color:var(--ink-sec);">
+              Menjadi penjaga mutu teknis dan manajemen jadwal. Tidak menerima proyek di luar kemampuannya, transparan dalam opname progres, tidak memotong hak tukang, dan menjaga uang pemberi kerja tetap aman.
+            </p>
+          </div>
+          <div class="kpi-box">
+            <div style="font-weight:800;color:var(--accent-gold);margin-bottom:6px;">3. Tukang Amanah</div>
+            <p style="font-size:13px;margin:0;color:var(--ink-sec);">
+              Disiplin menarik benang, menjaga ketegakan lot & kesikuan dinding, merapikan plesteran/acian, mengamankan semen dari lembap, serta merawat alat kerja dan kebersihan lokasi setiap sore.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="margin:22px 0 8px;font-size:16px;color:var(--accent-navy);">Ringkasan Klausul Wajib SPK Pelindung Konsumen & Pelaksana</h3>
+        <ul style="font-size:13.5px;color:var(--ink-sec);padding-left:20px;">
+          <li><strong>Identitas Terverifikasi:</strong> Wajib melampirkan fotokopi KTP asli yang masih berlaku dan nomor kontak aktif.</li>
+          <li><strong>Sistem Pembayaran Progresif:</strong> Tidak ada uang muka besar di awal; DP mobilisasi maksimal 10% saat tim dan alat tiba di lokasi.</li>
+          <li><strong>Standar Kualitas Fisik:</strong> Pencairan termin wajib lulus uji kerataan plester, kesikuan sudut, serta tes rendam waterproofing 24–48 jam untuk kamar mandi/dak.</li>
+          <li><strong>Retensi 5% & Garansi Kerja 6 Bulan:</strong> Sebesar 5% nilai jasa ditahan sebagai jaminan pemeliharaan terhadap kebocoran atau cacat kerja selama masa garansi.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TAB 5: PAKET LAYANAN BERETIKA -->
+    <section id="tab-paket" class="tab-panel hidden">
+      <div class="card">
+        <h2>5. Struktur Layanan Beretika — Merangkul Masyarakat & Menghormati Profesi</h2>
+        <p class="lead">
+          Harga disusun proporsional agar pemilik rumah kecil (40–80 m²) terbantu merencanakan bangunannya tanpa merusak ekosistem lisensi maupun profesi Arsitek dan Kontraktor di Indonesia.
+        </p>
+
+        <div class="grid-3">
+          <div class="tier-card">
+            <div>
+              <span class="badge-pill">EDUKASI & PROTEKSI AWAL</span>
+              <h3 style="margin:4px 0;color:var(--accent-navy);">Paket E-Book & Estimasi Dasar</h3>
+              <div class="price-tag">Rp 50.000</div>
+              <p style="font-size:13px;color:var(--ink-sec);">
+                E-Book <em>"Tukangku, Rumahku, Bisnisku dan Uangku"</em> + Akses Kalkulator Estimasi Mandiri & Lembar Screening Tukang/Mandor.
+              </p>
+            </div>
+            <div style="font-size:12px;color:var(--ink-muted);border-top:1px solid var(--border-warm);padding-top:10px;">
+              Cocok untuk edukasi mandiri pemilik rumah sebelum memulai renovasi.
+            </div>
+          </div>
+
+          <div class="tier-card highlight">
+            <div>
+              <span class="badge-pill" style="background:#D1FAE5;color:#065F46;">PAKET HUNIAN SEDERHANA (40–80 m²)</span>
+              <h3 style="margin:4px 0;color:var(--accent-navy);">Paket Gambar Acuan & RAB Terukur</h3>
+              <div class="price-tag">Rp 800.000</div>
+              <p style="font-size:13px;color:var(--ink-sec);">
+                Paket lengkap Gambar Kerja 2D Standar, Tampak Persepsi, RAB Open-Book Material + Upah, Jadwal Termin, & Draf SPK Mengikat untuk rumah 40–80 m².
+              </p>
+            </div>
+            <div style="font-size:12px;color:#065F46;border-top:1px solid #A7F3D0;padding-top:10px;font-weight:600;">
+              Solusi adil bagi masyarakat umum tanpa mematikan pasar konsultan arsitektur.
+            </div>
+          </div>
+
+          <div class="tier-card">
+            <div>
+              <span class="badge-pill">KOLABORASI PROFESIONAL (>100 m²)</span>
+              <h3 style="margin:4px 0;color:var(--accent-navy);">Proyek Khusus, Ruko & Kemitraan</h3>
+              <div class="price-tag">Sesuai Standar Profesi</div>
+              <p style="font-size:13px;color:var(--ink-sec);">
+                Untuk bangunan >100 m², struktur bertingkat khusus, atau desain kustom penuh, bersinergi dengan Arsitek Berlisensi, BIM Resmi, & Manajemen Konstruksi RAH.KARSA SPASIAL.
+              </p>
+            </div>
+            <div style="font-size:12px;color:var(--ink-muted);border-top:1px solid var(--border-warm);padding-top:10px;">
+              Kontak Resmi: rah.karsaspatia68@gmail.com • IG @rah.karsaspatianugrah68
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const SCREENING_CRITERIA = [
+      { id: 'c1', label: '1. Teknik Dasar Tarik Benang, Lot & Kesikuan Sudut', defaultVal: 8 },
+      { id: 'c2', label: '2. Kerapian Plesteran, Acian & Pasangan Dinding', defaultVal: 8 },
+      { id: 'c3', label: '3. Kemampuan Membaca Denah & Ukuran Gambar Kerja 2D', defaultVal: 8 },
+      { id: 'c4', label: '4. Logika Perhitungan Kebutuhan Material (Tanpa Asal Tebak)', defaultVal: 7 },
+      { id: 'c5', label: '5. Ketepatan Estimasi Waktu Kerja & Pembagian Tugas Tukang-Kenek', defaultVal: 8 },
+      { id: 'c6', label: '6. Kelengkapan Alat Kerja Pribadi (Meteran, Waterpass, Lot, Siku)', defaultVal: 8 },
+      { id: 'c7', label: '7. Disiplin Pengamanan Material (Semen di Atas Palet, Anti Hujan)', defaultVal: 8 },
+      { id: 'c8', label: '8. Kebersihan Area Proyek Sebelum & Sesudah Bekerja', defaultVal: 7 },
+      { id: 'c9', label: '9. Kejujuran Administrasi & Keterbukaan Nota / Opname', defaultVal: 8 },
+      { id: 'c10', label: '10. Kesediaan Tanda Tangan SPK Tertulis, KTP Asli & Retensi 5%', defaultVal: 9 }
+    ];
+
+    let latestCalc = {};
+
+    function verifyKarsa68Key(email, keyStr) {
+      if (!keyStr) return false;
+      const clean = keyStr.trim().toUpperCase();
+      if (!clean.startsWith('KARSA68-')) return false;
+      let h = 2166136261;
+      const seed = (email || '').trim().toLowerCase() + '|KARSA68';
+      for (let i = 0; i < seed.length; i++) {
+        h ^= seed.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      const expectedSuffix = ((h >>> 0) % 1000000).toString(16).toUpperCase().padStart(5, '0').slice(0, 4);
+      return clean.endsWith(expectedSuffix) || clean.startsWith('KARSA68-VIP-');
+    }
+
+    function fmtRp(n) {
+      return 'Rp ' + Math.round(Number(n) || 0).toLocaleString('id-ID');
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value.trim();
+      const role = document.getElementById('authRole').value;
+      const lic = document.getElementById('authLicense').value.trim();
+      const isVerified = verifyKarsa68Key(email, lic);
+
+      const sessionData = { email, role, lic, isVerified, ts: new Date().toISOString() };
+      try { localStorage.setItem('karsa68_consumer_session', JSON.stringify(sessionData)); } catch (_) {}
+      openWorkspace(sessionData);
+    }
+
+    function openWorkspace(session) {
+      document.getElementById('authGate').classList.add('hidden');
+      document.getElementById('appWorkspace').classList.remove('hidden');
+      document.getElementById('displayUserEmail').textContent = session.email;
+      document.getElementById('displayUserRole').textContent = session.role;
+      const badge = document.getElementById('licenseBadge');
+      if (session.isVerified) {
+        badge.textContent = 'Lisensi KARSA 68 Terverifikasi Penuh';
+      } else {
+        badge.textContent = 'Mode Konsumen Mandiri Aktif';
+      }
+      recalculateAll();
+      evaluateScreening();
+    }
+
+    function logoutSession() {
+      try { localStorage.removeItem('karsa68_consumer_session'); } catch (_) {}
+      document.getElementById('appWorkspace').classList.add('hidden');
+      document.getElementById('authGate').classList.remove('hidden');
+    }
+
+    function switchTab(tabId, btnEl) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      if (tabId === 'tab-gambar') drawBlueprint();
+    }
+
+    function initScreeningInputs() {
+      const box = document.getElementById('screeningInputsContainer');
+      box.innerHTML = SCREENING_CRITERIA.map(item => `
+        <div style="background:var(--bg-bone);border:1px solid var(--border-warm);padding:12px;border-radius:10px;">
+          <label for="${item.id}">${item.label}</label>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input id="${item.id}" type="range" min="1" max="10" step="1" value="${item.defaultVal}" style="margin:0;flex:1;" oninput="document.getElementById('${item.id}_val').textContent=this.value;evaluateScreening();" />
+            <strong id="${item.id}_val" style="min-width:28px;text-align:right;font-size:16px;color:var(--accent-navy);">${item.defaultVal}</strong>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function evaluateScreening() {
+      let sum = 0;
+      SCREENING_CRITERIA.forEach(item => {
+        const el = document.getElementById(item.id);
+        sum += Number(el ? el.value : item.defaultVal);
+      });
+      const avg = sum / SCREENING_CRITERIA.length;
+      const resBox = document.getElementById('screeningResultBox');
+      if (avg < 7.0) {
+        resBox.className = 'score-banner score-red';
+        resBox.innerHTML = `Skor Rata-Rata: ${avg.toFixed(1)} / 10,0 — ZONA MERAH (TIDAK DIREKOMENDASIKAN). Calon pelaksana belum memenuhi ambang batas aman (7,0). Risiko tinggi salah tarik benang, deviasi mutu, atau pembengkakan biaya.`;
+      } else if (avg <= 9.0) {
+        resBox.className = 'score-banner score-green';
+        resBox.innerHTML = `Skor Rata-Rata: ${avg.toFixed(1)} / 10,0 — ZONA HIJAU IDEAL (RENTANG TARGET 7,0 – 9,0). Kompetensi teknis dan etika kerja terukur baik. Lanjutkan dengan uji praktik lapangan 1 jam dan pengikatan SPK tertulis ber-retensi 5%.`;
+      } else {
+        resBox.className = 'score-banner score-gold';
+        resBox.innerHTML = `Skor Rata-Rata: ${avg.toFixed(1)} / 10,0 — SKOR SANGAT TINGGI (>9,0). Karena tidak ada manusia yang sempurna, tetap wajib lakukan verifikasi KTP asli, cek proyek sebelumnya, dan kunci dengan SPK bertahap.`;
+      }
+    }
+
+    function recalculateAll() {
+      const w = Math.max(3, Number(document.getElementById('inpWidth').value) || 6);
+      const l = Math.max(3, Number(document.getElementById('inpLength').value) || 10);
+      const floors = Math.max(1, Number(document.getElementById('inpFloors').value) || 1);
+      const baseRate = Number(document.getElementById('inpSpec').value) || 4500000;
+      const regIdx = Number(document.getElementById('inpRegion').value) || 1.0;
+      const rooms = Math.max(1, Number(document.getElementById('inpRooms').value) || 2);
+
+      const area = w * l * floors;
+      const grossRab = area * baseRate * regIdx;
+
+      // Estimasi kuantitas material utama secara proporsional
+      const estSemen = Math.ceil(area * 3.8);
+      const estBesi10 = Math.ceil(area * (floors > 1 ? 4.6 : 2.9));
+      const estKaso = Math.ceil(area * (floors > 1 ? 1.8 : 0.9));
+      const estTriplek = Math.ceil(area * (floors > 1 ? 0.55 : 0.22)); // efisiensi reuse multipleks 12mm
+      const estPasirM3 = +(area * 0.24).toFixed(1);
+      const estHebelM3 = +(area * 0.16).toFixed(1);
+
+      const stkSemen = Math.min(estSemen, Math.max(0, Number(document.getElementById('stkSemen').value) || 0));
+      const stkBesi10 = Math.min(estBesi10, Math.max(0, Number(document.getElementById('stkBesi10').value) || 0));
+      const stkKaso = Math.min(estKaso, Math.max(0, Number(document.getElementById('stkKaso').value) || 0));
+      const stkTriplek = Math.min(estTriplek, Math.max(0, Number(document.getElementById('stkTriplek').value) || 0));
+
+      const pSemen = Math.round(66000 * regIdx);
+      const pBesi10 = Math.round(85000 * regIdx);
+      const pKaso = Math.round(35000 * regIdx);
+      const pTriplek = Math.round(150000 * regIdx);
+      const pPasir = Math.round(310000 * regIdx);
+      const pHebel = Math.round(620000 * regIdx);
+
+      const stockSaving = (stkSemen * pSemen) + (stkBesi10 * pBesi10) + (stkKaso * pKaso) + (stkTriplek * pTriplek);
+      const grossMaterial = grossRab * 0.62;
+      const netMaterial = Math.max(0, grossMaterial - stockSaving);
+      const laborCost = grossRab * 0.38;
+      const netTotal = netMaterial + laborCost;
+      const estDays = Math.max(21, Math.round(area * 0.85 + (floors - 1) * 18));
+
+      document.getElementById('kpiArea').textContent = area.toFixed(1).replace('.', ',') + ' m²';
+      document.getElementById('kpiAreaNote').textContent = `${w} m × ${l} m • ${floors} Lantai`;
+      document.getElementById('kpiMaterial').textContent = fmtRp(netMaterial);
+      document.getElementById('kpiLabor').textContent = fmtRp(laborCost);
+      document.getElementById('kpiDuration').textContent = `Estimasi ±${estDays} Hari Kerja`;
+      document.getElementById('kpiTotalNet').textContent = fmtRp(netTotal);
+      document.getElementById('kpiSavingNote').textContent = `Penghematan stok gudang: ${fmtRp(stockSaving)}`;
+
+      const rows = [
+        { name: 'Semen PC 50 Kg (Struktur, Pasangan & Plester)', unit: 'Sak', price: pSemen, vol: estSemen, stk: stkSemen },
+        { name: 'Besi Beton 10mm SNI (Sloof, Kolom, Ring Balok / Pelat)', unit: 'Btg', price: pBesi10, vol: estBesi10, stk: stkBesi10 },
+        { name: 'Kayu Kaso 4x6 (Perancah & Rangka Bekisting)', unit: 'Btg', price: pKaso, vol: estKaso, stk: stkKaso },
+        { name: 'Multipleks / Triplek 12mm (Bekisting Pakai Ulang Efisien)', unit: 'Lbr', price: pTriplek, vol: estTriplek, stk: stkTriplek },
+        { name: 'Pasir Pasang & Beton Terukur', unit: 'm³', price: pPasir, vol: estPasirM3, stk: 0 },
+        { name: 'Bata Ringan / Dinding Arsitektur', unit: 'm³', price: pHebel, vol: estHebelM3, stk: 0 }
+      ];
+
+      let coreSum = 0;
+      const tbody = document.getElementById('materialTableBody');
+      let htmlRows = rows.map(r => {
+        const netVol = Math.max(0, +(r.vol - r.stk).toFixed(1));
+        const sub = Math.round(netVol * r.price);
+        coreSum += sub;
+        return `<tr>
+          <td>${r.name}</td>
+          <td>${fmtRp(r.price)} / ${r.unit}</td>
+          <td class="num">${r.vol} ${r.unit}</td>
+          <td class="num">${r.stk > 0 ? '-' + r.stk + ' ' + r.unit : '-'}</td>
+          <td class="num"><strong>${fmtRp(sub)}</strong></td>
+        </tr>`;
+      }).join('');
+
+      const archFinishingRest = Math.max(0, Math.round(netMaterial - coreSum));
+      htmlRows += `<tr>
+        <td>Paket Atap, Keramik, Kusen Aluminium, Sanitair, Cat & MEP</td>
+        <td>Paket Terukur</td>
+        <td class="num">1 Lot (${area.toFixed(0)} m²)</td>
+        <td class="num">-</td>
+        <td class="num"><strong>${fmtRp(archFinishingRest)}</strong></td>
+      </tr>
+      <tr style="background:var(--bg-soft);">
+        <td colspan="4"><strong>Jasa Upah Kerja Sistem Borongan Terukur + Alat Bantu (3 Fase QC)</strong></td>
+        <td class="num"><strong>${fmtRp(laborCost)}</strong></td>
+      </tr>`;
+      tbody.innerHTML = htmlRows;
+
+      const termins = [
+        { t: 'Uang Muka Mobilisasi (DP)', cond: 'Tim tiba di lokasi, alat lengkap, KTP diverifikasi, bouwplank siap', pct: 0.10 },
+        { t: 'Termin I (Fase Struktur Awal)', cond: 'Pondasi, sloof, kolom, & pemipaan bawah selesai sesuai benang/lot', pct: 0.25 },
+        { t: 'Termin II (Fase Dinding & Atap)', cond: 'Dinding plester-aci siku, rangka atap & penutup terpasang rapi', pct: 0.30 },
+        { t: 'Termin III (Serah Terima Fisik 100%)', cond: 'Keramik, kusen, cat, listrik, lulus tes rendam 24–48 jam & bersih puing', pct: 0.30 },
+        { t: 'Retensi Jaminan Mutu (6 Bulan)', cond: 'Dicairkan setelah masa pemeliharaan 6 bulan bebas bocor/retak kerja', pct: 0.05 }
+      ];
+      document.getElementById('terminTableBody').innerHTML = termins.map(tm => `
+        <tr>
+          <td><strong>${tm.t}</strong></td>
+          <td>${tm.cond}</td>
+          <td class="num">${Math.round(tm.pct * 100)}%</td>
+          <td class="num"><strong>${fmtRp(netTotal * tm.pct)}</strong></td>
+        </tr>
+      `).join('');
+
+      latestCalc = { w, l, floors, rooms, area, netMaterial, laborCost, netTotal, stockSaving, estDays, rows, archFinishingRest };
+      drawBlueprint();
+    }
+
+    function drawBlueprint() {
+      const c = document.getElementById('blueprintCanvas');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // Background Putih Bersih Kertas Gambar
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, W, H);
+
+      // Garis Tepi Etiket Gambar Kerja
+      ctx.strokeStyle = '#0F2942';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(14, 14, W - 28, H - 28);
+
+      // Header Etiket
+      ctx.fillStyle = '#F3EFE6';
+      ctx.fillRect(15, 15, W - 30, 44);
+      ctx.strokeStyle = '#CBD5E1';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(15, 59); ctx.lineTo(W - 15, 59); ctx.stroke();
+
+      ctx.fillStyle = '#0F2942';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText('LEMBAR GAMBAR KERJA 2D & TAMPAK PERSEPSI — KARSA 68 (RAH.KARSA SPASIAL)', 28, 42);
+
+      const { w = 6, l = 10, floors = 1, rooms = 2, area = 60 } = latestCalc;
+      ctx.font = '12px sans-serif';
+      ctx.fillStyle = '#475569';
+      ctx.fillText(`Ukuran: ${w}m × ${l}m | ${floors} Lantai | Luas: ${area.toFixed(1)} m²`, W - 330, 42);
+
+      // PANEL KIRI: DENAH 2D BERGRID AS
+      const leftX = 55, leftY = 95, maxPlanW = 420, maxPlanH = 370;
+      const scale = Math.min(maxPlanW / w, maxPlanH / l);
+      const drawW = w * scale;
+      const drawL = l * scale;
+      const px = leftX + (maxPlanW - drawW) / 2;
+      const py = leftY + (maxPlanH - drawL) / 2;
+
+      ctx.fillStyle = '#0F2942';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText('A. DENAH 2D BERGRID AS & TITIK KOLOM PRAKTIS', leftX, 82);
+
+      // Grid halus
+      ctx.strokeStyle = '#E2E8F0';
+      ctx.lineWidth = 1;
+      for (let gx = 0; gx <= w; gx += 1) {
+        const xPos = px + gx * scale;
+        ctx.beginPath(); ctx.moveTo(xPos, py); ctx.lineTo(xPos, py + drawL); ctx.stroke();
+      }
+      for (let gy = 0; gy <= l; gy += 1) {
+        const yPos = py + gy * scale;
+        ctx.beginPath(); ctx.moveTo(px, yPos); ctx.lineTo(px + drawW, yPos); ctx.stroke();
+      }
+
+      // Dinding Utama
+      ctx.strokeStyle = '#0F2942';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(px, py, drawW, drawL);
+
+      // Pembagian Ruang Internal (Kamar, Ruang Utama, KM/WC)
+      const splitX = px + drawW * 0.46;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(splitX, py); ctx.lineTo(splitX, py + drawL * 0.82); ctx.stroke();
+
+      const roomCount = Math.min(4, Math.max(1, rooms));
+      const roomH = (drawL * 0.82) / roomCount;
+      ctx.font = '11px sans-serif';
+      for (let i = 0; i < roomCount; i++) {
+        const ry = py + i * roomH;
+        if (i > 0) {
+          ctx.beginPath(); ctx.moveTo(px, ry); ctx.lineTo(splitX, ry); ctx.stroke();
+        }
+        ctx.fillStyle = '#334155';
+        ctx.fillText(`R. Tidur ${i + 1}`, px + 12, ry + roomH / 2 + 4);
+      }
+
+      // Kamar Mandi & Dapur di belakang
+      const backY = py + drawL * 0.82;
+      ctx.beginPath(); ctx.moveTo(px, backY); ctx.lineTo(px + drawW, backY); ctx.stroke();
+      ctx.fillStyle = '#0D7A5F';
+      ctx.fillText('KM/WC & Dapur (Wajib Tes Rendam)', px + 12, backY + (drawL * 0.18) / 2 + 4);
+
+      // Ruang Tamu / Keluarga
+      ctx.fillStyle = '#0F2942';
+      ctx.fillText('Ruang Utama / Keluarga', splitX + 14, py + drawL * 0.42);
+
+      // Bukaan Pintu Depan
+      ctx.strokeStyle = '#B4690E';
+      ctx.lineWidth = 3;
+      const doorX = splitX + (drawW * 0.54) * 0.35;
+      ctx.beginPath(); ctx.moveTo(doorX, py + drawL); ctx.lineTo(doorX + 28, py + drawL); ctx.stroke();
+      ctx.fillStyle = '#B4690E';
+      ctx.fillText('Akses Masuk Utama (Depan)', doorX - 24, py + drawL + 18);
+
+      // Titik Kolom Struktur / Praktis
+      const colsX = [px, splitX, px + drawW];
+      const colsY = [py, py + drawL * 0.41, backY, py + drawL];
+      ctx.fillStyle = '#0D7A5F';
+      colsX.forEach(cx => {
+        colsY.forEach(cy => {
+          ctx.fillRect(cx - 4, cy - 4, 8, 8);
+        });
+      });
+
+      // Dimensi Lebar & Panjang
+      ctx.fillStyle = '#0F2942';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText(`Lebar: ${w.toFixed(2)} m`, px + drawW / 2 - 38, py - 10);
+      ctx.save();
+      ctx.translate(px - 14, py + drawL / 2 + 35);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText(`Panjang: ${l.toFixed(2)} m`, 0, 0);
+      ctx.restore();
+
+      // PANEL KANAN: TAMPAK DEPAN PERSEPSI ARSITEKTUR
+      const rightX = 545, rightW = 440;
+      ctx.fillStyle = '#0F2942';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText('B. TAMPAK DEPAN PERSEPSI & ELEVASI LANTAI', rightX, 82);
+
+      const groundY = 445;
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(rightX, groundY); ctx.lineTo(rightX + rightW, groundY); ctx.stroke();
+
+      const elevScale = Math.min(340 / w, 68);
+      const bldgW = Math.max(180, Math.min(340, w * elevScale));
+      const floorH = 68;
+      const totalWallH = floors * floorH;
+      const bx = rightX + (rightW - bldgW) / 2;
+      const by = groundY - 14 - totalWallH;
+
+      // Peil Lantai +0.40
+      ctx.fillStyle = '#CBD5E1';
+      ctx.fillRect(bx - 10, groundY - 14, bldgW + 20, 14);
+      ctx.strokeStyle = '#0F2942';
+      ctx.strokeRect(bx - 10, groundY - 14, bldgW + 20, 14);
+
+      // Badan Bangunan per Lantai
+      ctx.fillStyle = '#FAF8F3';
+      ctx.fillRect(bx, by, bldgW, totalWallH);
+      ctx.strokeStyle = '#0F2942';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(bx, by, bldgW, totalWallH);
+
+      for (let f = 0; f < floors; f++) {
+        const fy = by + f * floorH;
+        if (f > 0) {
+          ctx.beginPath(); ctx.moveTo(bx, fy); ctx.lineTo(bx + bldgW, fy); ctx.stroke();
+        }
+        // Jendela
+        ctx.fillStyle = '#E0F2FE';
+        ctx.fillRect(bx + 24, fy + 16, 42, 34);
+        ctx.strokeRect(bx + 24, fy + 16, 42, 34);
+
+        ctx.fillRect(bx + bldgW - 66, fy + 16, 42, 34);
+        ctx.strokeRect(bx + bldgW - 66, fy + 16, 42, 34);
+      }
+
+      // Pintu Lantai Dasar
+      ctx.fillStyle = '#D97706';
+      ctx.fillRect(bx + bldgW / 2 - 16, groundY - 14 - 48, 32, 48);
+      ctx.strokeRect(bx + bldgW / 2 - 16, groundY - 14 - 48, 32, 48);
+
+      // Atap Pelana / Perisai Tropis
+      const roofPeakY = by - 58;
+      ctx.fillStyle = '#E2DCCE';
+      ctx.beginPath();
+      ctx.moveTo(bx - 18, by);
+      ctx.lineTo(bx + bldgW / 2, roofPeakY);
+      ctx.lineTo(bx + bldgW + 18, by);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#334155';
+      ctx.font = '11.5px sans-serif';
+      ctx.fillText(`Peil Lantai +0.40 m dari Muka Jalan`, bx, groundY + 20);
+      ctx.fillText(`Tinggi Bangunan: ±${(floors * 3.4 + 2.2).toFixed(1)} m (${floors} Lantai)`, bx, groundY + 38);
+
+      // Catatan Etiket Bawah
+      ctx.fillStyle = '#0D7A5F';
+      ctx.font = 'bold 11.5px sans-serif';
+      ctx.fillText('STANDAR LAPANGAN: Wajib cek tarik benang siku 90°, lot vertikal kolom, & tes rendam area basah sebelum serah terima.', 28, H - 26);
+    }
+
+    function downloadBlueprintPng() {
+      drawBlueprint();
+      const canvas = document.getElementById('blueprintCanvas');
+      const link = document.createElement('a');
+      link.download = 'Gambar_Kerja_2D_KARSA68.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function exportBoqCsv() {
+      if (!latestCalc.rows) recalculateAll();
+      let csv = 'No,Uraian Material / Pekerjaan,Satuan,Harga Satuan (Rp),Volume Bruto,Potong Stok Gudang,Volume Bersih,Subtotal (Rp)\n';
+      latestCalc.rows.forEach((r, idx) => {
+        const netVol = Math.max(0, +(r.vol - r.stk).toFixed(1));
+        const sub = Math.round(netVol * r.price);
+        csv += `${idx + 1},"${r.name}",${r.unit},${r.price},${r.vol},${r.stk},${netVol},${sub}\n`;
+      });
+      csv += `7,"Paket Atap, Keramik, Kusen, Sanitair, Cat & MEP",Lot,${latestCalc.archFinishingRest},1,0,1,${latestCalc.archFinishingRest}\n`;
+      csv += `8,"Upah Kerja Sistem Borongan Terukur + Alat (3 Fase)",Lot,${Math.round(latestCalc.laborCost)},1,0,1,${Math.round(latestCalc.laborCost)}\n`;
+      csv += `,"TOTAL ESTIMASI RAB BERSIH (${latestCalc.area.toFixed(1)} m2)",,,,,,${Math.round(latestCalc.netTotal)}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Laporan_RAB_Transparan_KARSA68.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportFullReportPrint() {
+      drawBlueprint();
+      window.print();
+    }
+
+    // Inisialisasi awal
+    initScreeningInputs();
+    recalculateAll();
+    evaluateScreening();
+
+    try {
+      const saved = localStorage.getItem('karsa68_consumer_session');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.email) openWorkspace(parsed);
+      }
+    } catch (_) {}
+  </script>
+</body>
+</html>

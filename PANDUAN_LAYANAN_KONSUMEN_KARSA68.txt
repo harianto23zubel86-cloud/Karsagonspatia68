@@ -1,0 +1,24 @@
+====================================================================
+PANDUAN LAYANAN KONSUMEN — KARSA 68 (RAH.KARSA SPASIAL)
+====================================================================
+1. ISOLASI & KEBERSIHAN BERKAS
+   Folder KARSA68 ini khusus berisi antarmuka Layanan Konsumen yang
+   terpisah 100% dari Ruang Produksi internal. Anda dapat menghapus
+   atau mengunduh ulang paket ini kapan saja dengan aman.
+
+2. CARA MEMBUKA APLIKASI DI HP MAUPUN LAPTOP
+   - Unduh berkas KARSA68_Layanan_Konsumen_Mandiri.html (atau ekstrak
+     Paket_Layanan_Konsumen_KARSA68.zip terlebih dahulu).
+   - Buka menggunakan browser Google Chrome, Safari, atau Microsoft Edge
+     (hindari membuka langsung dari layar pratinjau dalam aplikasi chat).
+   - Masukkan Email dan Kata Sandi Anda untuk masuk ke ruang hitung.
+
+3. FITUR UTAMA UNTUK MELINDUNGI ANGGARAN & MUTU BANGUNAN
+   - Kalkulator RAB & Pemotong Stok Material Gudang (Open-Book).
+   - Generator Gambar Kerja 2D Bergrid As & Tampak Persepsi (.PNG).
+   - Lembar Screening Objektif Mandor & Tukang (Target Nilai 7,0 - 9,0).
+   - Skema Pembayaran Termin Aman + Retensi Jaminan Mutu 5% (6 Bulan).
+   - Ekspor Laporan Cetak PDF & Tabel RAB (.CSV / Excel).
+
+Kontak Resmi: rah.karsaspatia68@gmail.com | IG: @rah.karsaspatianugrah68
+====================================================================
