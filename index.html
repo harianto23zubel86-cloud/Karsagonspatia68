@@ -1,83 +1,96 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Katalog Harga Material - RAH.KARSA SPASIAL</title>
-  <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; padding: 16px; background: #f4f6f8; color: #1e293b; }
-    .container { max-width: 720px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-    .badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; margin-bottom: 8px; }
-    h1 { font-size: 20px; margin: 0 0 4px 0; color: #0f172a; }
-    p.sub { font-size: 13px; color: #64748b; margin: 0 0 16px 0; }
-    input.search { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; margin-bottom: 16px; outline: none; }
-    input.search:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th { background: #0f172a; color: #ffffff; text-align: left; padding: 11px 12px; font-weight: 600; }
-    td { padding: 11px 12px; border-bottom: 1px solid #e2e8f0; }
-    tr:hover td { background: #f8fafc; }
-    .price { font-weight: 700; color: #0369a1; white-space: nowrap; }
-    .cat { font-size: 12px; color: #64748b; display: block; }
-    .footer { margin-top: 20px; font-size: 12px; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 12px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KARSAGON P68 — Data Carestimase</title>
+    <style>
+        :root {
+            --primary: #d97706;
+            --secondary: #1f2937;
+            --bg: #f3f4f6;
+            --text: #111827;
+        }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        .result { margin-top: 20px; padding: 15px; background: #fffbeb; border-left: 4px solid var(--primary); display: none; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <span class="badge">PORTAL HARGA MATERIAL</span>
-    <h1>RAH.KARSA SPASIAL — KARSAGON</h1>
-    <p class="sub">Referensi Estimasi Harga Material Konstruksi Terkini</p>
 
-    <input type="text" id="cari" class="search" placeholder="Ketik nama material (contoh: besi, triplek, semen, kaso)..." onkeyup="filterMaterial()">
-
-    <div class="table-wrap">
-      <table id="tabelMaterial">
-        <thead>
-          <tr>
-            <th>Nama Material</th>
-            <th>Satuan</th>
-            <th>Harga Estimasi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Besi Beton Polos 10 mm SNI<span class="cat">Struktur & Pembesian</span></td><td>Batang</td><td class="price">Rp 85.000</td></tr>
-          <tr><td>Besi Beton Polos 8 mm SNI<span class="cat">Struktur & Pembesian</span></td><td>Batang</td><td class="price">Rp 62.000</td></tr>
-          <tr><td>Besi Beton Ulir D13 SNI<span class="cat">Struktur & Pembesian</span></td><td>Batang</td><td class="price">Rp 138.000</td></tr>
-          <tr><td>Kawat Bendrat<span class="cat">Struktur & Pembesian</span></td><td>Kg</td><td class="price">Rp 25.000</td></tr>
-          <tr><td>Kayu Kaso 4x6<span class="cat">Bekisting & Kayu</span></td><td>Batang</td><td class="price">Rp 35.000</td></tr>
-          <tr><td>Triplek / Multiplex 12 mm<span class="cat">Bekisting & Kayu</span></td><td>Lembar</td><td class="price">Rp 150.000</td></tr>
-          <tr><td>Triplek / Multiplex 9 mm<span class="cat">Bekisting & Kayu</span></td><td>Lembar</td><td class="price">Rp 115.000</td></tr>
-          <tr><td>Phenolic Film Plywood 12 mm<span class="cat">Bekisting Cor</span></td><td>Lembar</td><td class="price">Rp 235.000</td></tr>
-          <tr><td>Semen Portland 50 Kg<span class="cat">Pasangan & Plesteran</span></td><td>Sak</td><td class="price">Rp 68.000</td></tr>
-          <tr><td>Semen Instan Perekat Bata Ringan 40 Kg<span class="cat">Pasangan & Plesteran</span></td><td>Sak</td><td class="price">Rp 95.000</td></tr>
-          <tr><td>Bata Ringan (Hebel) Standar<span class="cat">Pasangan Dinding</span></td><td>m³</td><td class="price">Rp 610.000</td></tr>
-          <tr><td>Pasir Pasang / Cor<span class="cat">Agregat</span></td><td>m³</td><td class="price">Rp 290.000</td></tr>
-          <tr><td>Batu Split 1/2 Cor Beton<span class="cat">Agregat</span></td><td>m³</td><td class="price">Rp 310.000</td></tr>
-          <tr><td>Baja Ringan Kanal C75.75<span class="cat">Rangka Atap & Kanopi</span></td><td>Batang</td><td class="price">Rp 92.000</td></tr>
-          <tr><td>Reng Baja Ringan 30.45<span class="cat">Rangka Atap & Kanopi</span></td><td>Batang</td><td class="price">Rp 42.000</td></tr>
-          <tr><td>Atap Spandek Pasir 0.35 mm<span class="cat">Penutup Atap</span></td><td>Meter</td><td class="price">Rp 72.000</td></tr>
-          <tr><td>Paving Block Bata 6 cm K-300<span class="cat">Luar Ruang</span></td><td>m²</td><td class="price">Rp 95.000</td></tr>
-          <tr><td>Cat Tembok Interior 5 Kg<span class="cat">Finishing</span></td><td>Galon</td><td class="price">Rp 165.000</td></tr>
-        </tbody>
-      </table>
+<div class="container">
+    <h1>KARSAGON P68</h1>
+    <div class="form-group">
+        <label for="tier">Pilih Kategori Layanan:</label>
+        <select id="tier" onchange="updatePlaceholder()">
+            <option value="awam">Tier Awam (Rp20.000/m²)</option>
+            <option value="kontraktor">Tier Menengah - Kontraktor/Mandor (Rp15.000/m²)</option>
+            <option value="arsitek">Tier Tertinggi - Arsitek (Max Rp3.000.000)</option>
+        </select>
     </div>
-
-    <div class="footer">
-      *Harga merupakan acuan estimasi pasar dan dapat menyesuaikan lokasi pengiriman serta volume pesanan.<br>
-      <strong>RAH.KARSA SPASIAL</strong> • Layanan Konstruksi & Estimasi
+    <div class="form-group">
+        <label for="luas" id="luas-label">Luas Bangunan (m²):</label>
+        <input type="number" id="luas" placeholder="Masukkan luas Netto">
     </div>
-  </div>
+    <div class="form-group" id="file-group" style="display:none;">
+        <label for="file">Unggah Kredensial Arsitek / Gambar Kerja:</label>
+        <input type="file" id="file">
+    </div>
+    <button onclick="calculate()">Proses Estimasi & SPK</button>
 
-  <script>
-    function filterMaterial() {
-      var input = document.getElementById("cari").value.toLowerCase();
-      var rows = document.querySelectorAll("#tabelMaterial tbody tr");
-      rows.forEach(function(row) {
-        var text = row.innerText.toLowerCase();
-        row.style.display = text.indexOf(input) > -1 ? "" : "none";
-      });
+    <div class="result" id="result">
+        <h3>Hasil Analisis Karsagon</h3>
+        <p id="biaya-text"></p>
+        <p><strong>Status Akses:</strong> Terkunci (Menunggu Verifikasi Pembayaran)</p>
+        <hr>
+        <h4>Registrasi Ekosistem Karsagon</h4>
+        <input type="text" id="nama" placeholder="Nama Lengkap" style="margin-bottom:10px;"><br>
+        <input type="text" id="kawasan" placeholder="Kawasan/Wilayah (Contoh: Kuta, Badung)" style="margin-bottom:10px;"><br>
+        <p><small>*Nomor HP dan Alamat Lengkap otomatis disembunyikan demi privasi.</small></p>
+        <button onclick="register()">Daftar & Bayar Akses</button>
+    </div>
+</div>
+
+<script>
+    function updatePlaceholder() {
+        const tier = document.getElementById('tier').value;
+        const fileGroup = document.getElementById('file-group');
+        const luasInput = document.getElementById('luas');
+        if (tier === 'arsitek') {
+            fileGroup.style.display = 'block';
+            luasInput.value = '';
+            luasInput.placeholder = 'Estimasi Volume';
+        } else {
+            fileGroup.style.display = 'none';
+        }
     }
-  </script>
+
+    function calculate() {
+        const tier = document.getElementById('tier').value;
+        const luas = document.getElementById('luas').value;
+        if(!luas) { alert('Harap isi data ukuran'); return; }
+        
+        let total = 0;
+        if(tier === 'awam') total = luas * 20000;
+        else if(tier === 'kontraktor') total = luas * 15000;
+        else if(tier === 'arsitek') total = Math.min(luas * 25000, 3000000);
+
+        document.getElementById('biaya-text').innerHTML = `Estimasi Biaya Sistem: <strong>Rp ${total.toLocaleString()}</strong>`;
+        document.getElementById('result').style.display = 'block';
+    }
+
+    function register() {
+        const nama = document.getElementById('nama').value;
+        const kawasan = document.getElementById('kawasan').value;
+        if(!nama || !kawasan) { alert('Lengkapi data registrasi zona'); return; }
+        alert('Data diterima. Mengalihkan ke Gerbang Pembayaran...');
+    }
+</script>
+
 </body>
 </html>
