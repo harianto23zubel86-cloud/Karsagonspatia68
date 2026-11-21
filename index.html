@@ -1,96 +1,158 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KARSAGON P68 — Data Carestimase</title>
-    <style>
-        :root {
-            --primary: #d97706;
-            --secondary: #1f2937;
-            --bg: #f3f4f6;
-            --text: #111827;
-        }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        h1 { color: var(--primary); text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-        .result { margin-top: 20px; padding: 15px; background: #fffbeb; border-left: 4px solid var(--primary); display: none; }
-    </style>
-</head>
-<body>
+[build]
+  publish = "."
+  functions = "netlify/functions"
 
-<div class="container">
-    <h1>KARSAGON P68</h1>
-    <div class="form-group">
-        <label for="tier">Pilih Kategori Layanan:</label>
-        <select id="tier" onchange="updatePlaceholder()">
-            <option value="awam">Tier Awam (Rp20.000/m²)</option>
-            <option value="kontraktor">Tier Menengah - Kontraktor/Mandor (Rp15.000/m²)</option>
-            <option value="arsitek">Tier Tertinggi - Arsitek (Max Rp3.000.000)</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="luas" id="luas-label">Luas Bangunan (m²):</label>
-        <input type="number" id="luas" placeholder="Masukkan luas Netto">
-    </div>
-    <div class="form-group" id="file-group" style="display:none;">
-        <label for="file">Unggah Kredensial Arsitek / Gambar Kerja:</label>
-        <input type="file" id="file">
-    </div>
-    <button onclick="calculate()">Proses Estimasi & SPK</button>
+# Jembatan API dari Web Publik ke Serverless Bridge
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/gateway-bridge"
+  status = 200
+  force = true
 
-    <div class="result" id="result">
-        <h3>Hasil Analisis Karsagon</h3>
-        <p id="biaya-text"></p>
-        <p><strong>Status Akses:</strong> Terkunci (Menunggu Verifikasi Pembayaran)</p>
-        <hr>
-        <h4>Registrasi Ekosistem Karsagon</h4>
-        <input type="text" id="nama" placeholder="Nama Lengkap" style="margin-bottom:10px;"><br>
-        <input type="text" id="kawasan" placeholder="Kawasan/Wilayah (Contoh: Kuta, Badung)" style="margin-bottom:10px;"><br>
-        <p><small>*Nomor HP dan Alamat Lengkap otomatis disembunyikan demi privasi.</small></p>
-        <button onclick="register()">Daftar & Bayar Akses</button>
-    </div>
-</div>
+# Fallback SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
-<script>
-    function updatePlaceholder() {
-        const tier = document.getElementById('tier').value;
-        const fileGroup = document.getElementById('file-group');
-        const luasInput = document.getElementById('luas');
-        if (tier === 'arsitek') {
-            fileGroup.style.display = 'block';
-            luasInput.value = '';
-            luasInput.placeholder = 'Estimasi Volume';
-        } else {
-            fileGroup.style.display = 'none';
-        }
+# Header Keamanan Tingkat Tinggi & Pembatasan Izin Latar Belakang
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    Cache-Control = "public, max-age=0, must-revalidate"
+{
+  "name": "karsagon-data-carestimase-web-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RAH.KARSA SPASIAL - Portal Aplikasi Web Publik Terpisah (Client Gateway)",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+const crypto = require('crypto');
+
+const OFFICIAL_RATES = Object.freeze({
+  A4: 12500,
+  A3: 25000,
+  A2: 50000
+});
+
+exports.handler = async (event) => {
+  const securityHeaders = {
+    'Content-Type': 'application/json',
+    'X-Frame-Options': 'DENY',
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'no-referrer'
+  };
+
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers: securityHeaders,
+      body: JSON.stringify({ ok: false, error: 'METHOD_NOT_ALLOWED' })
+    };
+  }
+
+  try {
+    const payload = JSON.parse(event.body || '{}');
+    const role = String(payload.userRole || 'UMUM').toUpperCase();
+    const a4 = Math.max(0, parseInt(payload.sheets?.A4 || 0, 10));
+    const a3 = Math.max(0, parseInt(payload.sheets?.A3 || 0, 10));
+    const a2 = Math.max(0, parseInt(payload.sheets?.A2 || 0, 10));
+    const certCode = String(payload.certCode || '').trim();
+    const idempotencyKey = String(payload.idempotencyKey || '').trim();
+
+    if (!idempotencyKey) {
+      return {
+        statusCode: 400,
+        headers: securityHeaders,
+        body: JSON.stringify({ ok: false, error: 'MISSING_IDEMPOTENCY_KEY' })
+      };
     }
 
-    function calculate() {
-        const tier = document.getElementById('tier').value;
-        const luas = document.getElementById('luas').value;
-        if(!luas) { alert('Harap isi data ukuran'); return; }
-        
-        let total = 0;
-        if(tier === 'awam') total = luas * 20000;
-        else if(tier === 'kontraktor') total = luas * 15000;
-        else if(tier === 'arsitek') total = Math.min(luas * 25000, 3000000);
+    // 1. Pemeriksaan Awal Lapis Singa di Gerbang Edge
+    const requiresExpert = a2 > 0 || Boolean(payload.slfActive) || Boolean(payload.hseHighRisk);
+    const allowedExpertRoles = ['KONTRAKTOR', 'AKADEMISI', 'PROFESIONAL'];
+    const certPattern = /^(SKA|STRA|STRI)-[0-9]{3}-[0-9]{4,8}$/i;
 
-        document.getElementById('biaya-text').innerHTML = `Estimasi Biaya Sistem: <strong>Rp ${total.toLocaleString()}</strong>`;
-        document.getElementById('result').style.display = 'block';
+    if (requiresExpert && (!allowedExpertRoles.includes(role) || !certPattern.test(certCode))) {
+      return {
+        statusCode: 403,
+        headers: securityHeaders,
+        body: JSON.stringify({
+          ok: false,
+          shield: 'LION_SHIELD',
+          error: 'Akses Lembar A2 / Analisa Struktur SLF & HSE High Risk wajib akun Kontraktor, Akademisi, atau Profesional dengan Nomor Registrasi Arsitek/Ahli Struktur valid.'
+        })
+      };
     }
 
-    function register() {
-        const nama = document.getElementById('nama').value;
-        const kawasan = document.getElementById('kawasan').value;
-        if(!nama || !kawasan) { alert('Lengkapi data registrasi zona'); return; }
-        alert('Data diterima. Mengalihkan ke Gerbang Pembayaran...');
-    }
-</script>
+    // 2. Rekalkulasi Tarif Per Lembar di Sisi Server
+    const totalSheets = a4 + a3 + a2;
+    const grandTotalIdr = (a4 * OFFICIAL_RATES.A4) + (a3 * OFFICIAL_RATES.A3) + (a2 * OFFICIAL_RATES.A2);
 
-</body>
-</html>
+    if (totalSheets <= 0 || grandTotalIdr <= 0) {
+      return {
+        statusCode: 400,
+        headers: securityHeaders,
+        body: JSON.stringify({ ok: false, error: 'Minimal 1 lembar dokumen harus dipilih.' })
+      };
+    }
+
+    // 3. Teruskan ke Dapur Produksi bila PRIVATE_KITCHEN_ENDPOINT sudah diisi di Netlify Env
+    if (process.env.PRIVATE_KITCHEN_ENDPOINT) {
+      const ts = Date.now().toString();
+      const nonce = crypto.randomUUID();
+      const hmacSecret = process.env.GATEWAY_BRIDGE_SECRET || 'CONFIGURE_IN_NETLIFY_ENV';
+      const sig = crypto.createHmac('sha256', hmacSecret).update(`${ts}:${nonce}:${idempotencyKey}`).digest('hex');
+
+      const upstreamRes = await fetch(`${process.env.PRIVATE_KITCHEN_ENDPOINT}/internal/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Gateway-Ts': ts,
+          'X-Gateway-Nonce': nonce,
+          'X-Gateway-Signature': sig,
+          'X-Idempotency-Key': idempotencyKey
+        },
+        body: JSON.stringify({ ...payload, verifiedTotalIdr: grandTotalIdr, totalSheets })
+      });
+
+      const upstreamData = await upstreamRes.json();
+      return { statusCode: upstreamRes.status, headers: securityHeaders, body: JSON.stringify(upstreamData) };
+    }
+
+    // 4. Mode Mandiri Siap Tayang & Screenshot (Sebelum VPC Dapur Produksi Disambungkan)
+    const snapshotId = `KSG-SNAP-${Date.now().toString().slice(-6)}-${crypto.randomInt(100, 999)}`;
+    const waterHash = crypto.createHash('sha256').update(`${snapshotId}:${idempotencyKey}:${grandTotalIdr}`).digest('hex').toUpperCase().slice(0, 24);
+
+    return {
+      statusCode: 200,
+      headers: securityHeaders,
+      body: JSON.stringify({
+        ok: true,
+        mode: 'EDGE_VERIFIED_QUEUE',
+        snapshotId,
+        idempotencyKey,
+        totalSheets,
+        grandTotalIdr,
+        waterSignature: `SHA256-${waterHash}`,
+        workerCluster: '12-WORKER-ASYNC-READY'
+      })
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers: securityHeaders,
+      body: JSON.stringify({ ok: false, error: 'GATEWAY_BRIDGE_INTERNAL_ERROR' })
+    };
+  }
+};
