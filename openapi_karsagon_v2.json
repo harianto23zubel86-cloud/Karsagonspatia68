@@ -1,0 +1,25 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "KARSAGON Data Care Estimate — Layanan Mandiri Pelanggan API",
+    "version": "2.4.0",
+    "description": "Kontrak API terstruktur untuk kalkulasi estimasi mandiri berbasis metode kerja, toleransi waste material, standar K3, dan sinkronisasi gambar kerja 2D/MEP."
+  },
+  "paths": {
+    "/api/v2/session/verify": {
+      "post": {
+        "summary": "Verifikasi sesi peran pengguna & kunci lisensi KARSA 68"
+      }
+    },
+    "/api/v2/estimate/calculate": {
+      "post": {
+        "summary": "Kalkulasi RAB mandiri (material + waste, tenaga metode kerja, K3, dan potong stok gudang)"
+      }
+    },
+    "/api/v2/shopdrawing/sync-check": {
+      "post": {
+        "summary": "Validasi sinkronisasi spasial denah 2D, elevasi, dan jalur pemipaan MEP pra-konstruksi"
+      }
+    }
+  }
+}
