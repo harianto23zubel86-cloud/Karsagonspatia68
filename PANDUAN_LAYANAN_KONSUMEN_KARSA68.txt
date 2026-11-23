@@ -1,20 +1,37 @@
 ====================================================================
-PANDUAN LAYANAN ONLINE PELANGGAN — KARSAGON • KARSA 68
+PANDUAN PAKET 68 UPGRADE SISTEM (REVISI BULAN NOVEMBER — V27)
+KARSAGON DATA CARESTIMASE • KARSA 68 (RAH.KARSA SPASIAL)
 ====================================================================
-1. HALAMAN DEPAN (GERBANG ONLINE)
-   - Menampilkan Pengantar Perencanaan, Visual Desain & Pengawasan QC,
-     Pintasan Modul E-Book, serta Lokasi Pendaftaran Akses Pelanggan
-     secara ringkas (tanpa alur bertele-tele dan tanpa alamat offline).
+1. DAFTAR 6 BERKAS RESMI DI DALAM PAKET INI (SIAP GITHUB & NETLIFY)
+   1) index.html                              -> Berkas utama portal web publik (GitHub Pages / Netlify)
+   2) KARSA68_Layanan_Konsumen_Mandiri.html   -> Salinan mandiri offline HP/Laptop konsumen
+   3) openapi_karsagon_v2.json                -> Kontrak API v2.7 (Jembatan Input Suara & Sinkronisasi DED)
+   4) PANDUAN_LAYANAN_KONSUMEN_KARSA68.txt    -> Dokumentasi arsitektur & panduan pemakaian
+   5) Template_Kontrol_Termin_KARSA68.csv     -> Tabel kontrol pencairan termin & retensi 5%
+   6) netlify.toml                            -> Konfigurasi header & anti-cache hosting statis
 
-2. URUTAN MENU LAYANAN DI DALAM PINTU GERBANG
-   - Tahap 1 (Input Gambar & Data): Pilihan utama #1 Masukkan Gambar
-     Sketsa/Lahan (.JPG/.PNG), atau lewat Berkas PDF, Suara, maupun
-     Input Ukuran Mandiri (dimulai bersih dari Rp 0).
-   - Tahap 2 (Hasil Gambar 2D & RAB): Tinjau Lembar Gambar Kerja Denah
-     2D Bergrid As, Tampak Persepsi, serta Rincian Material & Upah.
-   - Tahap 3 (Pembayaran Data yang Diambil): Pilih paket data/gambar
-     yang diambil dan konfirmasi pembayaran secara online.
-   - Tahap 4 (Unduh Gambar/Data atau Kirim Langsung ke Email): Unduh
-     Gambar 2D (.PNG), Laporan (.PDF), Tabel (.CSV), atau kirim salinan
-     lengkap langsung ke alamat email terdaftar Anda, lalu keluar.
+2. PROTOKOL ISOLASI ARSITEKTUR (RUANG KONSUMEN VS MESIN PRODUKSI RKRE)
+   - Ruang Layanan Konsumen (KARSA 68) berjalan 100% deterministik, cepat,
+     dan terpisah penuh dari kode inti Ruang Produksi RKRE.
+   - Tidak ada pemrosesan AI yang mengubah kode aplikasi secara mandiri.
+   - Fitur Pilihan 3 (Modul Penerima Input Suara) bekerja murni sebagai
+     penangkap dikte lisan yang menerjemahkan ukuran bangunan, jumlah ruang,
+     posisi tangga/void, hingga pemisahan utilitas (Sumur Resapan Greywater
+     di bawah tangga ber-casing kedap vs Bio-Septictank Kloset di parkir depan
+     & pembuangan air hujan langsung ke saluran jalan) menjadi Skema JSON
+     Parameter DED yang langsung menggambar Lembar Vektor/Kanvas DED Resolusi
+     Tinggi (2400x1350 px .PNG & Vektor .SVG) atau diteruskan ke Mesin Produksi
+     Gambar RKRE terpisah.
+
+3. URUTAN 4 TAHAP LAYANAN DI DALAM PINTU GERBANG
+   - Tahap 1: Input Gambar (.JPG/.PNG), Berkas (.PDF), Input Suara Terintegrasi
+              Jembatan DED v2.7, atau Input Ukuran Mandiri (mulai bersih Rp 0).
+   - Tahap 2: Hasil Gambar Kerja DED 2D Resolusi Tinggi (Tampak Atas, Tampak
+              Depan/Potongan, & Analisa Utilitas Air/Resapan) + Rincian RAB.
+   - Tahap 3: Pembayaran Paket Data yang Diambil / Aktivasi Kunci Lisensi Resmi.
+   - Tahap 4: Unduh Gambar Resolusi Tinggi (.PNG), Vektor (.SVG), Payload (.JSON),
+              Laporan (.PDF), Tabel (.CSV), atau Kirim ke Email.
+
+Kontak Resmi : rah.karsaspatia68@gmail.com | IG: @rah.karsaspatianugrah68
+Portal Resmi : www.karsagonspatia68.com
 ====================================================================
