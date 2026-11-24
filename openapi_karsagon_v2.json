@@ -1,34 +1,24 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "KARSAGON Data Care Estimate — KARSA 68 Consumer & Voice Bridge API",
-    "version": "2.7.0",
-    "description": "Kontrak API deterministik Ruang Layanan Konsumen KARSA 68 (100% terpisah dari kode inti Ruang Produksi RKRE). Modul penerima input suara mengekstrak parameter ukuran, tata ruang, dan pemisahan utilitas menjadi skema JSON baku untuk dirender ke kanvas/vektor DED resolusi tinggi maupun dikirim ke mesin produksi gambar terpisah."
+    "title": "KARSAGON Data Care Estimate — Layanan Mandiri Pelanggan API",
+    "version": "2.4.0",
+    "description": "Kontrak API terstruktur untuk kalkulasi estimasi mandiri berbasis metode kerja, toleransi waste material, standar K3, dan sinkronisasi gambar kerja 2D/MEP."
   },
   "paths": {
     "/api/v2/session/verify": {
       "post": {
-        "summary": "Verifikasi sesi peran pelanggan & kunci lisensi resmi KARSA 68"
+        "summary": "Verifikasi sesi peran pengguna & kunci lisensi KARSA 68"
       }
     },
     "/api/v2/estimate/calculate": {
       "post": {
-        "summary": "Kalkulasi RAB mandiri open-book (material + waste, tenaga metode kerja 3 fase, K3, & potong stok gudang)"
-      }
-    },
-    "/api/v2/voice/dispatch": {
-      "post": {
-        "summary": "Modul Penerima Input Suara: konversi transkrip lisan ke payload JSON parameter DED (dimensi, tangga/void, pemisahan sumur resapan greywater vs bio-septictank kloset & drainase jalan)"
-      }
-    },
-    "/api/v2/rkre/sync-patch": {
-      "post": {
-        "summary": "Jembatan satu arah penerima patch JSON parameter dari/ke Mesin Produksi Gambar RKRE yang tersimpan terpisah (tanpa otonomi pengubahan kode aplikasi)"
+        "summary": "Kalkulasi RAB mandiri (material + waste, tenaga metode kerja, K3, dan potong stok gudang)"
       }
     },
     "/api/v2/shopdrawing/sync-check": {
       "post": {
-        "summary": "Validasi sinkronisasi spasial DED 2D resolusi tinggi (.PNG/.SVG), elevasi potongan, analisa air bersih/resapan, dan bebas benturan pipa terhadap sloof/balok"
+        "summary": "Validasi sinkronisasi spasial denah 2D, elevasi, dan jalur pemipaan MEP pra-konstruksi"
       }
     }
   }
